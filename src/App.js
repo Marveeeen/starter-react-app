@@ -2,33 +2,36 @@ import { useState, useEffect } from "react";
 
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
+import { CssBaseline, Button } from "@mui/material";
+
+import PokemonType from "./utils/PokemonType";
 
 const PokemonRow = ({ pokemon, onSelect }) => (
   <tr>
     <td>{pokemon.name.english}</td>
     <td>{pokemon.type.join(", ")}</td>
     <td>
-      <button onClick={() => onSelect(pokemon)}>Select</button>
+      <Button 
+        variant='contained'
+        color='primary'
+        onClick={() => onSelect(pokemon)}
+      >
+        More Information
+      </Button>
     </td>
   </tr>
 );
 
 PokemonRow.propTypes = {
-  pokemon: PropTypes.shape({
-    name: PropTypes.shape({
-      english: PropTypes.string.isRequired,
-    }),
-    type: PropTypes.arrayOf(PropTypes.string.isRequired),
-  }),
-  onSelect: PropTypes.func.isRequired,
+  pokemon: PropTypes.shape({PokemonType})
 };
 
-const PokemonInfo = ({ name, base }) => (
+const PokemonInfo = ({ name : { english }, base }) => (
   <section>
     <table>
       <thead>
         <tr>
-          <th>{name.english}</th>
+          <th>{english}</th>
         </tr>
       </thead>
       <tbody>
@@ -43,19 +46,7 @@ const PokemonInfo = ({ name, base }) => (
   </section>
 );
 
-PokemonInfo.propTypes = {
-  name: PropTypes.shape({
-    english: PropTypes.string,
-  }),
-  base: PropTypes.shape({
-    HP: PropTypes.number.isRequired,
-    Attack: PropTypes.number.isRequired,
-    Defense: PropTypes.number.isRequired,
-    "Sp. Attack": PropTypes.number.isRequired,
-    "Sp. Defense": PropTypes.number.isRequired,
-    Speed: PropTypes.number.isRequired,
-  }),
-};
+PokemonInfo.propTypes = PokemonType
 
 const Title = styled.h1`
   text-align: center;
@@ -67,7 +58,7 @@ const TwoColumnLayout = styled.div`
   grid-column-gap: 1rem;
 `;
 
-const Container = styled.div`
+const PageContainer = styled.div`
   margin: auto;
   width: 800;
   padding-top: 1rem;
@@ -91,7 +82,8 @@ function App() {
   }, [filter]);
 
   return (
-    <Container>
+    <PageContainer>
+      <CssBaseline />
       <header>
         <Title>Pokemon Search</Title>
       </header>
@@ -130,7 +122,7 @@ function App() {
         </section>
         {selectedItem && <PokemonInfo {...selectedItem} />}
       </TwoColumnLayout>
-    </Container>
+    </PageContainer>
   );
 }
 
