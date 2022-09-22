@@ -1,25 +1,65 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useReducer } from "react";
 
 const PokemonContext = createContext({});
 
+const pokemonReducer = (state, action) => {
+  switch (action.type) {
+    case "SET_FILTER":
+      return {
+        ...state,
+        filter: action.payload,
+      };
+    case "SET_POKEMON":
+      return {
+        ...state,
+        pokemons: action.payload,
+      };
+    case "SET_SELECTED_POKEMON":
+      return {
+        ...state,
+        selectedPokemon: action.payload,
+      };
+    default:
+      throw new Error("No action");
+  }
+};
+
 export const PokemonProvider = ({ children }) => {
-  const [pokemons, setPokemons] = useState([]);
-  const [filter, setFilter] = useState("");
-  const [selectedPokemon, setSelectedPokemon] = useState(null);
+  const [state, dispatch] = useReducer(pokemonReducer, {
+    pokemons: [],
+    filter: "",
+    selectedPokemon: null,
+  });
+
+  const { filter, pokemons, selectedPokemon } = state
 
   useEffect(() => {
     fetch("http://localhost:3000/starter-react-app/pokemon.json")
       .then((resp) => resp.json())
-      .then((data) => setPokemons(data));
+      .then((data) =>
+        dispatch({
+          type: "SET_POKEMON",
+          payload: data,
+        })
+      );
   }, [filter]);
 
   const handleSelect = (pokemon) => {
-    setSelectedPokemon(pokemon);
+    dispatch({
+      type: 'SET_SELECTED_POKEMON',
+      payload: pokemon
+    });
   };
 
   const handleChange = (e) => {
-    setSelectedPokemon(null);
-    setFilter(e.target.value);
+    dispatch({
+      type: 'SET_SELECTED_POKEMON',
+      action: null
+    });
+    dispatch({
+      type: 'SET_FILTER',
+      action: e.target.value
+    });
   };
 
   return (
@@ -29,7 +69,6 @@ export const PokemonProvider = ({ children }) => {
         pokemons,
         selectedPokemon,
         onChange: handleChange,
-        setPokemons,
         onSelect: handleSelect,
       }}
     >
