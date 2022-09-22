@@ -16,7 +16,6 @@ export const PageContainer = styled.div`
   padding-top: 1rem;
 `;
 
-
 export const Input = styled.input`
   width: 100%;
   font-size: x-large;
