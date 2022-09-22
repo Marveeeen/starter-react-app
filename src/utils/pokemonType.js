@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const PokemonType = PropTypes.shape({
+const pokemonType = PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.shape({
         english: PropTypes.string.isRequired,
@@ -19,4 +19,4 @@ const PokemonType = PropTypes.shape({
       }),
 })
 
-export default PokemonType;
+export default pokemonType;

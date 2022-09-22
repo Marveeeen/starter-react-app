@@ -4,49 +4,64 @@ import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 import { CssBaseline, Button } from "@mui/material";
 
-import PokemonType from "./utils/PokemonType";
+import pokemonType from "./utils/pokemonType";
+import PokemonRow from "./components/PokemonRow";
 
-const PokemonRow = ({ pokemon, onSelect }) => (
-  <tr>
-    <td>{pokemon.name.english}</td>
-    <td>{pokemon.type.join(", ")}</td>
-    <td>
-      <Button 
-        variant='contained'
-        color='primary'
-        onClick={() => onSelect(pokemon)}
-      >
-        More Information
-      </Button>
-    </td>
-  </tr>
-);
-
-PokemonRow.propTypes = {
-  pokemon: PropTypes.shape({PokemonType})
+const PokemonInfo = ({ name: { english }, base }) => {
+  return (
+    <section>
+      <table>
+        <thead>
+          <tr>
+            <th>{english}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.keys(base).map((key) => (
+            <tr key={key}>
+              <td>{key}</td>
+              <td>{base[key]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  );
 };
 
-const PokemonInfo = ({ name : { english }, base }) => (
+PokemonInfo.propTypes = pokemonType;
+
+const PokemonFilter = ({ filter, onChange }) => (
+  <form>
+    <Input type="text" value={filter} onChange={onChange} />
+  </form>
+);
+
+const PokemonTable = ({ pokemons, filter, onSelect }) => (
   <section>
-    <table>
+    <table width="100%">
       <thead>
         <tr>
-          <th>{english}</th>
+          <th>Name</th>
+          <th>Type</th>
         </tr>
       </thead>
       <tbody>
-        {Object.keys(base).map((key) => (
-          <tr key={key}>
-            <td>{key}</td>
-            <td>{base[key]}</td>
-          </tr>
-        ))}
+        {pokemons
+          .filter((pokemon) =>
+            pokemon.name.english.toLowerCase().includes(filter.toLowerCase())
+          )
+          .map((pokemon) => (
+            <PokemonRow
+              pokemon={pokemon}
+              key={pokemon.id}
+              onSelect={onSelect}
+            />
+          ))}
       </tbody>
     </table>
   </section>
 );
-
-PokemonInfo.propTypes = PokemonType
 
 const Title = styled.h1`
   text-align: center;
@@ -60,7 +75,7 @@ const TwoColumnLayout = styled.div`
 
 const PageContainer = styled.div`
   margin: auto;
-  width: 800;
+  width: 800px;
   padding-top: 1rem;
 `;
 
@@ -68,7 +83,7 @@ const Input = styled.input`
   width: 100%;
   font-size: x-large;
   padding: 0.2rem;
-`
+`;
 
 function App() {
   const [pokemons, setPokemons] = useState([]);
@@ -81,44 +96,30 @@ function App() {
       .then((data) => setPokemons(data));
   }, [filter]);
 
+  const handleSelect = (pokemon) => {
+    setSelectedItem(pokemon);
+  };
+
+  const handleChange = (e) => {
+    setSelectedItem(null);
+    setFilter(e.target.value);
+  };
+
   return (
     <PageContainer>
       <CssBaseline />
       <header>
         <Title>Pokemon Search</Title>
       </header>
-      <form>
-        <Input
-          type="text"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-      </form>
+
       <TwoColumnLayout>
         <section>
-          <table width="100%">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pokemons
-                .filter((pokemon) =>
-                  pokemon.name.english
-                    .toLowerCase()
-                    .includes(filter.toLowerCase())
-                )
-                .map((pokemon) => (
-                  <PokemonRow
-                    pokemon={pokemon}
-                    key={pokemon.id}
-                    onSelect={(pokemon) => setSelectedItem(pokemon)}
-                  />
-                ))}
-            </tbody>
-          </table>
+          <PokemonFilter filter={filter} onChange={handleChange} />
+          <PokemonTable
+            pokemons={pokemons}
+            filter={filter}
+            onSelect={handleSelect}
+          />
         </section>
         {selectedItem && <PokemonInfo {...selectedItem} />}
       </TwoColumnLayout>
