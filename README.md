@@ -11,6 +11,10 @@ Simple react app that allows to select and search pokemon and see their stats.
 
 Create a simple react app that uses react hooks for simple state management like useState and useEffect, implement creating components and proptypes for checking if the props are valid, use emotion for simple styled elements, and lastly implement MUI for the button.
 
+## Optimizations
+
+Created utils and reusable components so that it can be easy to maintain and to make the code DRY.
+
 ## Lessons Learned:
 
 - How useEffect works.
