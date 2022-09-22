@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import pokemons from "./pokemon.json";
 import PropTypes from "prop-types";
 
 const PokemonRow = ({ pokemon, onSelect }) => (
@@ -58,8 +57,16 @@ PokemonInfo.propTypes = {
 };
 
 function App() {
+  const [pokemons, setPokemons] = useState([]);
   const [filter, setFilter] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/starter-react-app/pokemon.json')
+      .then(resp => resp.json())
+      .then(data => setPokemons(data));
+  }, [filter])
+
   return (
     <div className="App">
       <header>
