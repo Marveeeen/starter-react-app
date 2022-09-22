@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import PropTypes from "prop-types";
+import styled from "@emotion/styled";
 
 const PokemonRow = ({ pokemon, onSelect }) => (
   <tr>
@@ -31,12 +32,12 @@ const PokemonInfo = ({ name, base }) => (
         </tr>
       </thead>
       <tbody>
-      {Object.keys(base).map((key) => (
-        <tr key={key}>
-          <td>{key}</td>
-          <td>{base[key]}</td>
-        </tr>
-      ))}
+        {Object.keys(base).map((key) => (
+          <tr key={key}>
+            <td>{key}</td>
+            <td>{base[key]}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   </section>
@@ -56,36 +57,52 @@ PokemonInfo.propTypes = {
   }),
 };
 
+const Title = styled.h1`
+  text-align: center;
+`;
+
+const TwoColumnLayout = styled.div`
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-column-gap: 1rem;
+`;
+
+const Container = styled.div`
+  margin: auto;
+  width: 800;
+  padding-top: 1rem;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  font-size: x-large;
+  padding: 0.2rem;
+`
+
 function App() {
   const [pokemons, setPokemons] = useState([]);
   const [filter, setFilter] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/starter-react-app/pokemon.json')
-      .then(resp => resp.json())
-      .then(data => setPokemons(data));
-  }, [filter])
+    fetch("http://localhost:3000/starter-react-app/pokemon.json")
+      .then((resp) => resp.json())
+      .then((data) => setPokemons(data));
+  }, [filter]);
 
   return (
-    <div className="App">
+    <Container>
       <header>
-        <h1 className="title">Pokemon Search</h1>
+        <Title>Pokemon Search</Title>
       </header>
       <form>
-        <input
+        <Input
           type="text"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
       </form>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "70% 30%",
-          gridColumnGap: "1rem",
-        }}
-      >
+      <TwoColumnLayout>
         <section>
           <table width="100%">
             <thead>
@@ -112,8 +129,8 @@ function App() {
           </table>
         </section>
         {selectedItem && <PokemonInfo {...selectedItem} />}
-      </div>
-    </div>
+      </TwoColumnLayout>
+    </Container>
   );
 }
 
