@@ -1,5 +1,5 @@
 import { CssBaseline } from "@mui/material";
-import { Title, PageContainer, TwoColumnLayout } from "./utils/styles";
+import { Title, PageContainer, TwoColumnLayout } from "./assets/styles";
 
 import PokemonInfo from "./components/PokemonInfo";
 import PokemonFilter from "./components/PokemonFilter";

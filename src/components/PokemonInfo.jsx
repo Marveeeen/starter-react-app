@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import PokemonContext from "../context/PokemonContext";
-import pokemonType from "../utils/pokemonType";
+import pokemonType from "../assets/pokemonType";
 
 const PokemonInfo = () => {
   const { selectedPokemon } = useContext(PokemonContext)

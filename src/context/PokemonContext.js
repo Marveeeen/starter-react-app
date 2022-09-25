@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
+import pokemonDatas from '../data/pokemon.json'
 
 const PokemonContext = createContext({});
 
@@ -34,14 +35,18 @@ export const PokemonProvider = ({ children }) => {
   const { filter, pokemons, selectedPokemon } = state
 
   useEffect(() => {
-    fetch("http://localhost:3000/starter-react-app/pokemon.json")
-      .then((resp) => resp.json())
-      .then((data) =>
-        dispatch({
-          type: "SET_POKEMON",
-          payload: data,
-        })
-      );
+    // fetch("http://localhost:3000/starter-react-app/pokemon.json")
+    //   .then((resp) => resp.json())
+    //   .then((data) =>
+    //     dispatch({
+    //       type: "SET_POKEMON",
+    //       payload: data,
+    //     })
+    //   );
+    dispatch({
+      type: "SET_POKEMON",
+      payload: pokemonDatas,
+    })
   }, [filter]);
 
   const handleSelect = (pokemon) => {
@@ -54,11 +59,11 @@ export const PokemonProvider = ({ children }) => {
   const handleChange = (e) => {
     dispatch({
       type: 'SET_SELECTED_POKEMON',
-      action: null
+      payload: null
     });
     dispatch({
       type: 'SET_FILTER',
-      action: e.target.value
+      payload: e.target.value
     });
   };
 

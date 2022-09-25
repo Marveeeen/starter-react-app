@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
 
-import pokemonType from "../utils/pokemonType";
+import pokemonType from "../assets/pokemonType";
 
 const PokemonRow = ({ pokemon, onSelect }) => (
   <tr>
